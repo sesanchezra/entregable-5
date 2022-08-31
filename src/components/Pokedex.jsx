@@ -8,6 +8,7 @@ import Pokeball from '../assets/Pokeball.svg'
 import { useForm } from 'react-hook-form';
 import PokemonCard from './PokemonCard';
 import axios from 'axios';
+import ErrorSearch from './ErrorSearch';
 
 const defaultValue = {
     search: ''
@@ -24,14 +25,17 @@ const Pokedex = () => {
     const [search, setSearch] = useState()
 
     const submit = (data) => {
-        setSearch(data.search)
+        setSearch(data.search.toLowerCase())
+        console.log(data.search)
         reset(defaultValue)
     }
 
     const [pokemons, setPokemons] = useState()
+    const [errorSearch, setErrorSearch] = useState(false)
 
     useEffect(() => {
-        if(search){
+        console.log('Search cambio a:',search)
+        if (search) {
             console.log('entro al search')
             const URL = `https://pokeapi.co/api/v2/pokemon/${search}/`
             axios.get(URL)
@@ -39,25 +43,30 @@ const Pokedex = () => {
                     setPokemons(res.data)
                     console.log(res.data)
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    console.log(error)
+                    setErrorSearch(!errorSearch)
+                })
         }
-        else{
+        else {
+            console.log('Entra por que search es false: ',search)
             const URL = `https://pokeapi.co/api/v2/pokemon/`
             axios.get(URL)
                 .then(res => {
                     setPokemons(res.data.results)
+                    console.log('set hecho con search:',search)
                 })
                 .catch(error => console.log(error))
         }
-        
+
     }, [search])
 
 
+    console.log(search)
 
-    
     return (
         <div className='Pokedex'>
-            <img src={Pokeball} alt="" className='pokedex__pokeball'/>
+            <img src={Pokeball} alt="" className='pokedex__pokeball' />
 
             <div className='pokedex__header'>
                 <IconContext.Provider value={{ color: "white", className: 'pokedex__header__icon', size: '2.2em' }}>
@@ -77,28 +86,38 @@ const Pokedex = () => {
                 </form>
                 <div className='pokedex__cards'>
                     {
-                        pokemons?.length >=0  ?
-                            pokemons?.map(pokemon => (
-                                <PokemonCard
-                                    key={pokemon.name}
-                                    url={pokemon.url}
-                                />
-                            ))
+                        errorSearch ?
+                            <ErrorSearch
+                                setSearch={setSearch}
+                                search={search}
+                                setErrorSearch={setErrorSearch}
+                                errorSearch={errorSearch}
+                            />
                         :
+
+                            pokemons?.length >= 0 ?
+                                pokemons?.map(pokemon => (
+                                    <PokemonCard
+                                        key={pokemon.name}
+                                        url={pokemon.url}
+                                    />
+                                ))
+                            :
+
                                 <PokemonCard
                                     key={pokemons?.name}
                                     url={pokemons?.url}
                                 />
-                        
+
                     }
 
                     {
-                        
+
                     }
 
                 </div>
 
-                
+
 
 
             </div>
