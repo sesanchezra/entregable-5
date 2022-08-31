@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Anek+Telugu&display=swap');
 
 .PokemonCard{
-    width: 35%;
+    width: 40%;
     aspect-ratio: 2.1;
     background: linear-gradient(105deg, rgba(236,60,60,1), rgba(199,45,44,1), rgba(140,40,40,1));
     border-radius: 20px;
