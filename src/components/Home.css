@@ -60,12 +60,12 @@ radial-gradient(at 1% 16%, hsla(150, 92%, 68%, 1) 0, hsla(127, 88%, 70%, 0) 50%)
 }
 
 .home__form__text h2{
-    font-size: 25px;
+    font-size: 15px;
     /* color:hsla(217, 53%, 44%, 1); */
 }
 
 .home__form__text h3{
-    font-size: 20px;
+    font-size: 10px;
     font-weight:100;
 }
 
