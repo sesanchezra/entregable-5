@@ -30,7 +30,9 @@ const Pokedex = () => {
     useEffect(() => {
         const URL = `https://pokeapi.co/api/v2/pokemon/`
         axios.get(URL)
-            .then(res => setPokemons(res.data.results))
+            .then(res => {
+                setPokemons(res.data.results)
+            })
             .catch(error => console.log(error))
     }, [])
     return (
