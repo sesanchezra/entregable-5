@@ -21,20 +21,40 @@ const Pokedex = () => {
 
     const name = useSelector(state => state.nameSlice)
 
+    const [search, setSearch] = useState()
+
     const submit = (data) => {
-        console.log(data.search)
+        setSearch(data.search)
         reset(defaultValue)
     }
 
     const [pokemons, setPokemons] = useState()
+
     useEffect(() => {
-        const URL = `https://pokeapi.co/api/v2/pokemon/`
-        axios.get(URL)
-            .then(res => {
-                setPokemons(res.data.results)
-            })
-            .catch(error => console.log(error))
-    }, [])
+        if(search){
+            console.log('entro al search')
+            const URL = `https://pokeapi.co/api/v2/pokemon/${search}/`
+            axios.get(URL)
+                .then(res => {
+                    setPokemons(res.data)
+                    console.log(res.data)
+                })
+                .catch(error => console.log(error))
+        }
+        else{
+            const URL = `https://pokeapi.co/api/v2/pokemon/`
+            axios.get(URL)
+                .then(res => {
+                    setPokemons(res.data.results)
+                })
+                .catch(error => console.log(error))
+        }
+        
+    }, [search])
+
+
+
+    
     return (
         <div className='Pokedex'>
             <img src={Pokeball} alt="" className='pokedex__pokeball'/>
@@ -57,15 +77,28 @@ const Pokedex = () => {
                 </form>
                 <div className='pokedex__cards'>
                     {
-                        pokemons?.map(pokemon => (
-                            <PokemonCard
-                                key={pokemon.name}
-                                url={pokemon.url}
-                            />
-                        ))
+                        pokemons?.length >=0  ?
+                            pokemons?.map(pokemon => (
+                                <PokemonCard
+                                    key={pokemon.name}
+                                    url={pokemon.url}
+                                />
+                            ))
+                        :
+                                <PokemonCard
+                                    key={pokemons?.name}
+                                    url={pokemons?.url}
+                                />
+                        
+                    }
+
+                    {
+                        
                     }
 
                 </div>
+
+                
 
 
             </div>
