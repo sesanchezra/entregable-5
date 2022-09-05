@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import PokemonCard from './PokemonCard';
 import axios from 'axios';
 import ErrorSearch from './ErrorSearch';
+import Pagination from './Pagination';
 
 const defaultValue = {
     search: ''
@@ -16,11 +17,17 @@ const defaultValue = {
 
 const Pokedex = () => {
 
+    // Useform para el formulario
+
     const { register, handleSubmit, reset } = useForm()
 
     const navigate = useNavigate()
 
+    //Llamando el estado globa de redux con el nombre
+
     const name = useSelector(state => state.nameSlice)
+
+    //Función de búsqueda
 
     const [search, setSearch] = useState()
 
@@ -33,15 +40,14 @@ const Pokedex = () => {
     const [pokemons, setPokemons] = useState()
     const [errorSearch, setErrorSearch] = useState(false)
 
+    //UseEffect para la busqueda y petición inicial de pokemones
+
     useEffect(() => {
-        console.log('Search cambio a:',search)
         if (search) {
-            console.log('entro al search')
             const URL = `https://pokeapi.co/api/v2/pokemon/${search}/`
             axios.get(URL)
                 .then(res => {
                     setPokemons(res.data)
-                    console.log(res.data)
                 })
                 .catch(error => {
                     console.log(error)
@@ -49,12 +55,11 @@ const Pokedex = () => {
                 })
         }
         else {
-            console.log('Entra por que search es false: ',search)
             const URL = `https://pokeapi.co/api/v2/pokemon/`
             axios.get(URL)
                 .then(res => {
                     setPokemons(res.data.results)
-                    console.log('set hecho con search:',search)
+                    console.log(res.data)
                 })
                 .catch(error => console.log(error))
         }
@@ -62,7 +67,14 @@ const Pokedex = () => {
     }, [search])
 
 
-    console.log(search)
+    // Paginacion
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const [postPerPage, setPostPerPage] = useState(8)
+
+    const lastPostIndex = currentPage * postPerPage;
+    const firstPostIndex = lastPostIndex - postPerPage;
+    
 
     return (
         <div className='Pokedex'>
@@ -92,6 +104,7 @@ const Pokedex = () => {
                                 search={search}
                                 setErrorSearch={setErrorSearch}
                                 errorSearch={errorSearch}
+                                setPokemons={setPokemons}
                             />
                         :
 
@@ -117,6 +130,7 @@ const Pokedex = () => {
 
                 </div>
 
+                
 
 
 

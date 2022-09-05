@@ -5,13 +5,14 @@ import { IconContext } from "react-icons";
 import { BiErrorCircle } from "react-icons/bi";
 import './ErrorSearch.css'
 
-const ErrorSearch = ({ setSearch, search, setErrorSearch, errorSearch }) => {
+const ErrorSearch = ({ setSearch, search, setErrorSearch, errorSearch ,setPokemons}) => {
 
     const navigate = useNavigate()
 
     const goBack = () => {
         setSearch(false)
         setErrorSearch(!errorSearch)
+        setPokemons()
         console.log(search)
     }
 
